@@ -17,7 +17,6 @@ const CountryDetailsPage = () => {
     dispatch(fetchCountryDetailsRequest(id));
   }, [dispatch, id]);
  
-  console.log(countryDetails)
   const errorHolder = <p>Error: {error}</p>;
   const Stat = ({ title, type }) => (
     <div className="stat">
