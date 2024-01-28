@@ -18,10 +18,9 @@ const CountryDetailsPage = () => {
   }, [dispatch, id]);
 
   const memoizedCalculateTotal = useMemo(() => calculateTotal, []);
-
-  console.log(countryDetails)
-
+ 
   const errorHolder = <p>Error: {error}</p>;
+  // eslint-disable-next-line react/prop-types
   const Stat = ({ title, type }) => (
     <div className="stat">
       <div className="stat-title">{title}</div>
@@ -29,7 +28,7 @@ const CountryDetailsPage = () => {
         ? loadingSpinner
         : error
         ? errorHolder
-        : countryDetails && countryDetails.length === 0 && (
+        : countryDetails && countryDetails.length !== 0 && (
             <div className="stat-value">
               {memoizedCalculateTotal(countryDetails, type)}
             </div>

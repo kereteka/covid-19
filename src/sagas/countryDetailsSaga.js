@@ -13,7 +13,11 @@ function* fetchCountryDetails(action) {
     const response = yield call(api.fetchCountryDetailsRequest, isoCode);
     const { data } = yield call([response, 'json']);
 
-    yield put(fetchCountryDetailsSuccess(data));
+    if (data.length === 0) {
+      throw new Error('Data not found');
+    }
+        yield put(fetchCountryDetailsSuccess(data));
+    
   } catch (error) {
     yield put(fetchCountryDetailsFailure(error.message));
   }
