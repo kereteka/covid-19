@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchCountryDetailsRequest } from '../../actions/countryDetailsActions';
@@ -16,7 +16,11 @@ const CountryDetailsPage = () => {
   useEffect(() => {
     dispatch(fetchCountryDetailsRequest(id));
   }, [dispatch, id]);
- 
+
+  const memoizedCalculateTotal = useMemo(() => calculateTotal, []);
+
+  console.log(countryDetails)
+
   const errorHolder = <p>Error: {error}</p>;
   const Stat = ({ title, type }) => (
     <div className="stat">
@@ -25,9 +29,9 @@ const CountryDetailsPage = () => {
         ? loadingSpinner
         : error
         ? errorHolder
-        : countryDetails && (
+        : countryDetails && countryDetails.length === 0 && (
             <div className="stat-value">
-              {calculateTotal(countryDetails, type)}
+              {memoizedCalculateTotal(countryDetails, type)}
             </div>
           )}
     </div>
@@ -37,7 +41,7 @@ const CountryDetailsPage = () => {
       <div className="w-64 stats-vertical shadow text-center mx-auto mt-12 ">
         <h2>
           Country Covid-19 Details for{' '}
-          {countryDetails && !loading ? countryDetails[0].region.name : '-'}
+          {countryDetails && !loading ? countryDetails[0]?.region?.name : '-'}
         </h2>
         <div className="stat">
           <div className="stat-title"> Last Update</div>
@@ -46,7 +50,7 @@ const CountryDetailsPage = () => {
               ? loadingSpinner
               : error
               ? errorHolder
-              : countryDetails && countryDetails[0].last_update}
+              : countryDetails && countryDetails[0]?.last_update}
           </div>
         </div>
         <Stat title="Active Cases" type="active" />
